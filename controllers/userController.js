@@ -63,11 +63,74 @@ const deleteUser = asyncHandler(async(req,res)=>{
     }
 })
 
+//check if a User exists and get firstname and lastname
+
+async function getNameAndLastNameById(userId) {
+    try {
+      const user = await User.findById(userId);
+  
+      if (user) {
+        return { name: user.firstname, lastname: user.lastname };
+      } else {
+        return null; // User not found
+      }
+    } catch (error) {
+        res.status(500)
+        throw new Error(error.message)
+    }
+  }
+
+const checkUserExists = asyncHandler(async(req,res)=>{
+    try {
+        const {id} = req.params;
+        const userDetails = await getNameAndLastNameById(id);
+
+    if (userDetails) {
+      return res.status(200).json(userDetails);
+    } else {
+      return res.status(404).json({ message: `User with ID ${id} not found.` });
+    }
+    } catch (error) {
+        res.status(500)
+        throw new Error(error.message)
+    }
+})
+
+//check if a User exists
+
+async function doesUserExist(firstname, lastname) {
+    try {
+      const user = await User.findOne({ firstname, lastname });
+  
+      return !!user; // Returns true if user exists, false otherwise
+    } catch (error) {      
+      console.error('Error checking user existence:', error);
+      return false;
+    }
+  }
+  const checkUser = asyncHandler(async(req,res)=>{
+    try {
+        const {firstname,lastname} = req.params;       
+        const userExists = await doesUserExist(firstname,lastname);
+        if (userExists) {
+          return res.status(200).json({ message: `User ${firstname} ${lastname} exists.` });
+        } else {
+          return res.status(404).json(null);
+        }
+    } catch (error) {
+        res.status(500)
+        throw new Error(error.message)
+    }
+})
+
+
     module.exports = {
         getUsers,
         getUser,
         createUser,
         updateUser,
-        deleteUser
+        deleteUser,
+        checkUserExists,
+        checkUser,
 
     }

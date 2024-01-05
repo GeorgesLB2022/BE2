@@ -3,6 +3,7 @@ const express = require('express')
 const mongoose = require('mongoose')
 const app = express()
 const userRoute = require('./routes/userRoute')
+const trainerRoute = require('./routes/trainerRoute')
 const errorMiddleware = require('./middleware/errorMiddleware')
 const cors = require('cors')
 
@@ -12,6 +13,7 @@ const FRONT_END = process.env.FRONT_END
 
 app.use(express.json())
 app.use('/api/user', userRoute)
+app.use('/api/trainer', trainerRoute)
 app.use(cors(corsOptions))
 app.use(errorMiddleware)
 

@@ -1,7 +1,6 @@
-//const { ObjectId } = require('mongodb');
 const mongoose = require('mongoose')
 
-const userSchema = mongoose.Schema(
+const trainerSchema = mongoose.Schema(
     {
         firstname:{
             type: String,
@@ -19,19 +18,15 @@ const userSchema = mongoose.Schema(
             type: String,
             required: false,
         },
-        weight:{
-            type: Number,
+        Specialization:{
+            type: String,
             required: true,
-        },
-        trainerIds:[{
-            type: mongoose.Schema.Types.ObjectId,
-            ref: 'Trainer'
-        }]        
+        }
 
     },
     { timestamps:true}
    
 )
 
-const User = mongoose.model('User', userSchema);
-module.exports = User;
+const Trainer = mongoose.model('Trainer', trainerSchema);
+module.exports = Trainer;
